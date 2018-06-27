@@ -4,7 +4,7 @@ public class Kunde {
 	private int id;
 	private String vorname;
 	private String nachname;
-	private String adreesse;
+	private String adresse;
 	private String plz;
 	private String ort;
 	private String email;
@@ -35,11 +35,11 @@ public class Kunde {
 	}
 
 	public String getAdreesse() {
-		return adreesse;
+		return adresse;
 	}
 
 	public void setAdreesse(String adreesse) {
-		this.adreesse = adreesse;
+		this.adresse = adreesse;
 	}
 
 	public String getPlz() {

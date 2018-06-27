@@ -10,7 +10,6 @@ public class MyConnection {
 	private static Connection conn;
 
 	public MyConnection() {
-
 		try {
 			Class.forName("net.ucanaccess.jdbc.UcanaccessDriver");
 			conn = DriverManager.getConnection("jdbc:ucanaccess://C://Users//lucal//Downloads//CoolShoes");
