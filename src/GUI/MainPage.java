@@ -11,6 +11,8 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import net.ucanaccess.console.Main;
+
 public class MainPage {
 	public static void main(String[] args) {
 		JFrame frame = new JFrame("Cool Shoes");
@@ -19,6 +21,7 @@ public class MainPage {
 		JLabel order = new JLabel("Bestellung");
 		JButton historyButton = new JButton("History");
 		topPanel.setLayout(new BorderLayout());
+		 
 
 		frame.setLayout(new BorderLayout());
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

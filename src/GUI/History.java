@@ -8,23 +8,21 @@ import javax.swing.*;
 public class History {
 
 	public History() {
-		// headers for the table
-		String[] columns = new String[] { "Id", "Name", "Hourly Rate", "Part Time" };
-
-		// actual data for the table in a 2d array
-		Object[][] data = new Object[][] { { 1, "John", 40.0, false }, { 2, "Rambo", 70.0, false },
-				{ 3, "Zorro", 60.0, true }, };
 		JDialog dialog = new JDialog();
 		JPanel topPanel = new JPanel();
 		JPanel bottomPanel = new JPanel();
 		JLabel history = new JLabel("History");
 		JLabel name = new JLabel("Vorname, Nachname"); // TODO AUS Db lesen und
-														// Anzeigen
-		JLabel adresse = new JLabel("Testadresse \n 2020, Zürich"); // TODO
+		String[] columns = new String[] { "OrderNr.", "Versandpartner", "Mitarbeiter", "Status" };
+		Object[][] data = new Object[][] { { "TEST", "John", "40.0", "false" }, { "1", "John", "40.0", "false" },
+				{ "1", "John", "40.0", "false" }, };
 		JTable table = new JTable(data, columns);
-
+		JLabel adresse = new JLabel("Testadresse \n 2020, Zürich"); // TODO
 		// add the table to the frame
 		// table.add(new JScrollPane(table));
+
+		table.setPreferredScrollableViewportSize(table.getPreferredSize());
+		table.setFillsViewportHeight(true);
 
 		dialog.setLayout(new BorderLayout());
 		topPanel.setLayout(new BorderLayout());
@@ -39,10 +37,10 @@ public class History {
 		topPanel.add(history, BorderLayout.NORTH);
 		topPanel.add(name, BorderLayout.WEST);
 		topPanel.add(adresse, BorderLayout.EAST);
-		
-		bottomPanel.add(table, BorderLayout.SOUTH);
-		
-		dialog.add(topPanel, BorderLayout.NORTH);
+
+		bottomPanel.add(table, BorderLayout.CENTER);
+
+//		dialog.add(topPanel, BorderLayout.NORTH);
 		dialog.add(bottomPanel, BorderLayout.CENTER);
 		dialog.setLocationRelativeTo(null);
 		// dialog.pack();

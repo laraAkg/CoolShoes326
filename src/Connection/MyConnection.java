@@ -12,7 +12,7 @@ public class MyConnection {
 	public MyConnection() {
 		try {
 			Class.forName("net.ucanaccess.jdbc.UcanaccessDriver");
-			conn = DriverManager.getConnection("jdbc:ucanaccess://C://Users//lucal//Downloads//CoolShoes");
+			conn = DriverManager.getConnection("jdbc:ucanaccess://CoolShoes.accdb");
 		} catch (ClassNotFoundException err) {
 			System.out.println("Treiber kann nicht geladen werden");
 		} catch (SQLException err) {
@@ -20,13 +20,15 @@ public class MyConnection {
 		}
 	}
 
-	public ArrayList<String[]> getAllKunde(String tabelle) {
+	public ArrayList<Kunde> getAllKunde() {
+		ArrayList<Kunde> kunden = new ArrayList<>();
+
 		try {
 			Statement stmt = conn.createStatement();
 			ResultSet rs = stmt.executeQuery(
 					"SELECT KID as ID, KName as Name, KVorname as Vorname, KAdresse as Adresse, KPLZ as PLZ, KOrt as Ort, KEmailAdresse as Email, KPWD as Passwort FROM Kunde");
-			Kunde kunde = new Kunde();
 			while (rs.next()) {
+				Kunde kunde = new Kunde();
 				kunde.setId(rs.getInt("ID"));
 				kunde.setVorname(rs.getString("Vorname"));
 				kunde.setNachname(rs.getString("Name"));
@@ -35,13 +37,14 @@ public class MyConnection {
 				kunde.setOrt(rs.getString("Ort"));
 				kunde.setEmail(rs.getString("Email"));
 				kunde.setPasswort(rs.getString("Passwort"));
+				kunden.add(kunde);
 			}
 			rs.close();
 			stmt.close();
 		} catch (SQLException err) {
 			System.out.println("ungültiger SQL-Befehl");
 		}
-		return null;
+		return kunden;
 	}
 
 	public ArrayList<String[]> getAllBestellstatus(String tabelle) {

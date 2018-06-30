@@ -1,5 +1,6 @@
 package DAO;
 
+import java.util.ArrayList;
 import java.util.Date;
 
 public class BestuellungStatus {
@@ -9,6 +10,7 @@ public class BestuellungStatus {
 	private String status;
 	private Date bearbeitung;
 	private Date lieferunngsgeplant;
+
 
 	public Date getLieferunngsgeplant() {
 		return lieferunngsgeplant;
