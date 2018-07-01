@@ -39,7 +39,7 @@ public class History {
 		name.setFont(new Font("Tahoma", Font.PLAIN, 20));
 		adresse.setFont(new Font("Tahoma", Font.PLAIN, 20));
 		topPanel.setBackground(Color.WHITE);
-		bottomPanel.setBackground(Color.WHITE);
+		bottomPanel.setBackground(Color.WHITE);	
 		topPanel.add(name, BorderLayout.CENTER);
 		topPanel.add(adresse, BorderLayout.EAST);
 		bottomPanel.add(table, BorderLayout.SOUTH);

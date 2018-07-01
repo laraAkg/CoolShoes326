@@ -17,28 +17,27 @@ public class Table extends JPanel {
 		setLayout(new FlowLayout());
 
 		int counter = 0;
-		int counter2 = 0;
 		button = new JButton("Select");
 		Helper helper = new Helper();
 		ArrayList<BestellStatus> bestellungen = helper.getStati();
 
-		String[] columnNames = { "Bestellnr.", "Bearbeitung", "Lieferunggeplant", "zuletzt bearbeitet(Zeit)", "Status",
-				"" };
+		String[] columnNames = { "Bestellnr.", "Bearbeitung", "Lieferunggeplant",
+				"zuletzt bearbeitet(Zeit)", "Status", "" };
 
 		Object[][] data = new Object[bestellungen.size()][6];
 
 		for (BestellStatus b : bestellungen) {
+
 			data[counter][0] = b.getBestellnr();
 			data[counter][1] = b.getBearbeitung();
 			data[counter][2] = b.getLieferunngsgeplant();
-			data[counter][3] = b.getBsID();
+			data[counter][3] = helper.connection.getMitarbeiterFromBID(b.getBsID());
 			data[counter][4] = b.getStatus();
 			data[counter][5] = button;
 			counter++;
 		}
 
-		// System.out.println(data[3][1]); //Test zur Ausgabe daes Srings
-		// [Y-pos][X-Pos]
+		
 		table = new JTable(data, columnNames);
 		table.setPreferredScrollableViewportSize(new Dimension(500, 100));
 		table.setFillsViewportHeight(true);
@@ -54,5 +53,5 @@ public class Table extends JPanel {
 
 		JScrollPane scrollPane = new JScrollPane(table);
 		add(scrollPane);
-	}	
+	}
 }

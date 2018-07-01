@@ -45,6 +45,35 @@ public class MyConnection {
 		}
 		return kunden;
 	}
+	
+	public String getMitarbeiterFromBID(int bid) {
+		String kundenName = "";
+
+		try {
+			 PreparedStatement ps = conn 
+	                    .prepareStatement("SELECT FKMitarbeiter from Bestellungen where BID = ?");
+			 PreparedStatement ps2 = conn 
+	                    .prepareStatement("SELECT MAName, MAVorname from Mitarbeiter where MID = ?"); 
+			 
+	            ps.setInt(1, bid); 
+	            
+	            ResultSet rs = ps.executeQuery(); 
+	            
+	            while(rs.next())
+	            	ps2.setInt(1, rs.getInt(1)); 
+	            
+	            rs=ps2.executeQuery();
+	            
+	            while(rs.next())
+	            	kundenName = rs.getString(2) + ", " + rs.getString(1);
+	            
+	            ps.close(); 
+		} catch (SQLException err) {
+			System.out.println("ungültiger SQL-Befehl");
+		}
+		return kundenName;
+	}
+
 
 	public ArrayList<BestellStatus> getAllBestellstatus() {
 		ArrayList<BestellStatus> bestellungStati = new ArrayList<>();
