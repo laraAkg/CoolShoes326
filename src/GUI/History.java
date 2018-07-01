@@ -2,8 +2,15 @@ package GUI;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.FlowLayout;
 import java.awt.Font;
+import java.util.ArrayList;
+
 import javax.swing.*;
+import javax.swing.border.Border;
+
+import DAO.Kunde;
+import Helper.Helper;
 
 public class History {
 
@@ -11,15 +18,16 @@ public class History {
 		JDialog dialog = new JDialog();
 		JPanel topPanel = new JPanel();
 		JPanel bottomPanel = new JPanel();
-		JLabel history = new JLabel("History");
-		JLabel name = new JLabel("Vorname, Nachname"); // TODO AUS Db lesen und
+		Helper helper = new Helper();
+		ArrayList<Kunde> kunden = helper.getKunden();
+		int id = 1;
+		JLabel name = new JLabel(kunden.get(id).getVorname() + " " + kunden.get(id).getNachname());
+		JLabel adresse = new JLabel(kunden.get(id).getAdreesse() + ", " + kunden.get(id).getOrt() + " " + kunden.get(id).getPlz());
+
 		String[] columns = new String[] { "OrderNr.", "Versandpartner", "Mitarbeiter", "Status" };
 		Object[][] data = new Object[][] { { "TEST", "John", "40.0", "false" }, { "1", "John", "40.0", "false" },
 				{ "1", "John", "40.0", "false" }, };
 		JTable table = new JTable(data, columns);
-		JLabel adresse = new JLabel("Testadresse \n 2020, Zürich"); // TODO
-		// add the table to the frame
-		// table.add(new JScrollPane(table));
 
 		table.setPreferredScrollableViewportSize(table.getPreferredSize());
 		table.setFillsViewportHeight(true);
@@ -30,20 +38,16 @@ public class History {
 		dialog.setSize(700, 600);
 		name.setFont(new Font("Tahoma", Font.PLAIN, 20));
 		adresse.setFont(new Font("Tahoma", Font.PLAIN, 20));
-		history.setFont(new Font("Tahoma", Font.PLAIN, 35));
 		topPanel.setBackground(Color.WHITE);
 		bottomPanel.setBackground(Color.WHITE);
-
-		topPanel.add(history, BorderLayout.NORTH);
-		topPanel.add(name, BorderLayout.WEST);
+		topPanel.add(name, BorderLayout.CENTER);
 		topPanel.add(adresse, BorderLayout.EAST);
-
-		bottomPanel.add(table, BorderLayout.CENTER);
-
-//		dialog.add(topPanel, BorderLayout.NORTH);
+		bottomPanel.add(table, BorderLayout.SOUTH);
 		dialog.add(bottomPanel, BorderLayout.CENTER);
+		dialog.add(topPanel, BorderLayout.NORTH);
+		
 		dialog.setLocationRelativeTo(null);
-		// dialog.pack();
+//		dialog.pack();
 		dialog.setVisible(true);
 	}
 }

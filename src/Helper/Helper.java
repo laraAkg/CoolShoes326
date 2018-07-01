@@ -10,9 +10,7 @@ public class Helper {
 	public ArrayList<Kunde> getKunden() {
 		ArrayList<Kunde> kunden = connection.getAllKunde();
 		 for (Kunde kunde : kunden) {
-			 kunde.getAdreesse();
-			 kunde.getEmail();
-			 kunde.getId();
+			System.out.println(kunde);
 		 }
 		return kunden;
 	}
