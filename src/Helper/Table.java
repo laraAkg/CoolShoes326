@@ -1,61 +1,67 @@
 package Helper;
 
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
 import javax.swing.*;
 
 import DAO.BestellStatus;
+import GUI.History;
 
-public class Table extends JFrame {
- 
- JTable table;
- 
- public Table(){
-  setLayout(new FlowLayout());
-  
-  int counter = 0;
-  int counter2 = 0;
-  
-  Helper helper = new Helper();
-	
-  ArrayList<BestellStatus> bestellungen = helper.getStati();
-  
-  String[] columnNames = { "Bestellnr.", "Lieferung erwartet", "zuletzt bearbeitet(Person)",
-			"zuletzt bearbeitet(Zeit)", "Status" };
-  
-  Object[][] data = new Object[bestellungen.size()][5];
+public class Table extends JPanel {
 
-  
-  
-  for(BestellStatus b : bestellungen) {
-	  
-		 data[counter][0] = bestellungen.get(counter).getBestellnr();
-		 data[counter][1] = bestellungen.get(counter).getBearbeitung();
-		 data[counter][2] = bestellungen.get(counter).getLieferunngsgeplant();
-		 data[counter][3] = bestellungen.get(counter).getBsID();
-		 data[counter][4] = bestellungen.get(counter).getStatus();
-		 
-	  counter++;
-  }
-  
+	JTable table;
+	JButton button;
 
-  
-  //System.out.println(data[3][1]); //Test zur Ausgabe daes Srings [Y-pos][X-Pos]
-  table = new JTable(data, columnNames);
-  table.setPreferredScrollableViewportSize(new Dimension(500, 100));
-  table.setFillsViewportHeight(true);
-  
-  JScrollPane scrollPane = new JScrollPane(table);
-  add(scrollPane);
-  
- }
+	public Table() {
+		setLayout(new FlowLayout());
 
- public static void main(String args[]) {
-	 Table gui = new Table();
-  gui.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-  gui.setSize(600,200);;
-  gui.setVisible(true);
-  gui.setTitle("Test Tabelle");
- }
+		int counter = 0;
+		int counter2 = 0;
+		button = new JButton("Select");
+		Helper helper = new Helper();
+		ArrayList<BestellStatus> bestellungen = helper.getStati();
+
+		String[] columnNames = { "Bestellnr.", "Bearbeitung", "Lieferunggeplant",
+				"zuletzt bearbeitet(Zeit)", "Status", "" };
+
+		Object[][] data = new Object[bestellungen.size()][6];
+
+		for (BestellStatus b : bestellungen) {
+
+			// data[counter][0] = bestellungen.get(counter).getBestellnr();
+			data[counter][0] = b.getBestellnr();
+			// data[counter][1] = bestellungen.get(counter).getBearbeitung();
+			data[counter][1] = b.getBearbeitung();
+			// data[counter][2] =
+			// bestellungen.get(counter).getLieferunngsgeplant();
+			data[counter][2] = b.getLieferunngsgeplant();
+			// data[counter][3] = bestellungen.get(counter).getBsID();
+			data[counter][3] = b.getBsID();
+			// data[counter][4] = bestellungen.get(counter).getStatus();
+			data[counter][4] = b.getStatus();
+			data[counter][5] = button;
+			counter++;
+		}
+
+		// System.out.println(data[3][1]); //Test zur Ausgabe daes Srings
+		// [Y-pos][X-Pos]
+		table = new JTable(data, columnNames);
+		table.setPreferredScrollableViewportSize(new Dimension(500, 100));
+		table.setFillsViewportHeight(true);
+		table.add(button);
+
+		button.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				History history = new History();
+			}
+		});
+
+		JScrollPane scrollPane = new JScrollPane(table);
+		add(scrollPane);
+	}
 }
