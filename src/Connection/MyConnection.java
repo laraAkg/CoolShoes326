@@ -53,8 +53,9 @@ public class MyConnection {
 			Statement stmt = conn.createStatement();
 			ResultSet rs = stmt.executeQuery(
 					"SELECT BSID as id, Bestellnummer as Bestellnummer, Status as Status, Bearbeitung as Bearbeitung, Lieferunggeplant as Lieferunggeplant from BestellStatus");
-			BestellStatus bestuellungStatus = new BestellStatus();
+			BestellStatus bestuellungStatus;
 			while (rs.next()) {
+				bestuellungStatus = new BestellStatus();
 				bestuellungStatus.setBsID(rs.getInt(1));
 				bestuellungStatus.setBestellnr(rs.getString(2));
 				bestuellungStatus.setStatus(rs.getString(3));
