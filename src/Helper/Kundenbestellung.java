@@ -1,3 +1,4 @@
+package Helper;
 import DAO.BestuellungStatus;
 
 public class Kundenbestellung {

@@ -22,7 +22,6 @@ public class MyConnection {
 
 	public ArrayList<Kunde> getAllKunde() {
 		ArrayList<Kunde> kunden = new ArrayList<>();
-
 		try {
 			Statement stmt = conn.createStatement();
 			ResultSet rs = stmt.executeQuery(
@@ -47,23 +46,27 @@ public class MyConnection {
 		return kunden;
 	}
 
-	public ArrayList<String[]> getAllBestellstatus(String tabelle) {
+	public ArrayList<BestuellungStatus> getAllBestellstatus() {
+		ArrayList<BestuellungStatus> bestellungStati = new ArrayList<>();
+
 		try {
 			Statement stmt = conn.createStatement();
 			ResultSet rs = stmt.executeQuery(
-					"SELECT BID as id, FKKunde as Kunde, FKStatus as Status, FKMitarbeiter as Mitarbeiter FROM Bestellungen");
+					"SELECT BSID as id, Bestellnummer as Bestellnummer, Status as Status, Bearbeitung as Bearbeitung, Lieferunggeplant as Lieferunggeplant");
 			BestuellungStatus bestuellungStatus = new BestuellungStatus();
 			while (rs.next()) {
 				bestuellungStatus.setBsID(rs.getInt(""));
+				bestuellungStatus.setBestellnr(rs.getString(""));
 				bestuellungStatus.setStatus(rs.getString(""));
 				bestuellungStatus.setBearbeitung(rs.getDate(""));
 				bestuellungStatus.setLieferunngsgeplant(rs.getDate(""));
+				bestellungStati.add(bestuellungStatus);
 			}
 			rs.close();
 			stmt.close();
 		} catch (SQLException err) {
 			System.out.println("ungültiger SQL-Befehl");
 		}
-		return null;
+		return bestellungStati;
 	}
 }
