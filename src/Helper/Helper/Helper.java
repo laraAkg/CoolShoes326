@@ -1,11 +1,12 @@
 package Helper;
+
 import java.util.ArrayList;
 import Connection.MyConnection;
 import DAO.BestellStatus;
 import DAO.Kunde;
 
 public class Helper {
-	MyConnection connection = new MyConnection();
+	public MyConnection connection = new MyConnection();
 
 	public ArrayList<Kunde> getKunden() {
 		ArrayList<Kunde> kunden = connection.getAllKunde();
