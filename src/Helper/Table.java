@@ -22,8 +22,6 @@ public class Table extends JPanel {
 		button = new JButton("Select");
 		Helper helper = new Helper();
 		ArrayList<BestellStatus> bestellungen = helper.getStati();
-		TableCellRenderer buttonRenderer = new JTableButtonRenderer();
-
 		String[] columnNames = { "Bestellnr.", "Bearbeitung", "Lieferunggeplant",
 				"zuletzt bearbeitet(Zeit)", "Status", "" };
 
@@ -43,7 +41,6 @@ public class Table extends JPanel {
 		
 		table = new JTable(data, columnNames);
 		table.setFillsViewportHeight(true);
-//        table.getColumn("Button1").setCellRenderer(buttonRenderer);
 		table.setPreferredScrollableViewportSize(new Dimension(500, 100));
 		table.setFillsViewportHeight(true);
 		table.add(button);

@@ -22,7 +22,7 @@ public class MainPage {
 		JPanel downPanel = new JPanel();
 		JLabel order = new JLabel("Bestellung");
 		Table table = new Table();
-		JButton button = new JButton("test");
+		JButton button = new JButton("Search");
 
 		topPanel.setLayout(new BorderLayout());
 		frame.setLayout(new BorderLayout());
@@ -36,12 +36,12 @@ public class MainPage {
 		button.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				History history = new History();
+				SearchPage page = new SearchPage();
 			}
 		});
 		topPanel.add(order, BorderLayout.WEST);
 		downPanel.add(table, BorderLayout.CENTER);
-		downPanel.add(button, BorderLayout.SOUTH);
+		topPanel.add(button, BorderLayout.EAST);
 		frame.add(topPanel, BorderLayout.NORTH);
 		frame.add(downPanel, BorderLayout.CENTER);
 		frame.pack();
