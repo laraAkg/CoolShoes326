@@ -1,10 +1,10 @@
 package Helper;
-import DAO.BestuellungStatus;
+import DAO.BestellStatus;
 
 public class Kundenbestellung {
 
-	BestuellungStatus bestuellungStatus;
-	public BestuellungStatus getBestuellungStatus() {
+	BestellStatus bestuellungStatus;
+	public BestellStatus getBestuellungStatus() {
 		return bestuellungStatus;
 	}
 }

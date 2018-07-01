@@ -2,7 +2,7 @@ package Connection;
 
 import java.sql.*;
 import java.util.ArrayList;
-import DAO.BestuellungStatus;
+import DAO.BestellStatus;
 import DAO.Kunde;
 
 public class MyConnection {
@@ -46,20 +46,20 @@ public class MyConnection {
 		return kunden;
 	}
 
-	public ArrayList<BestuellungStatus> getAllBestellstatus() {
-		ArrayList<BestuellungStatus> bestellungStati = new ArrayList<>();
+	public ArrayList<BestellStatus> getAllBestellstatus() {
+		ArrayList<BestellStatus> bestellungStati = new ArrayList<>();
 
 		try {
 			Statement stmt = conn.createStatement();
 			ResultSet rs = stmt.executeQuery(
-					"SELECT BSID as id, Bestellnummer as Bestellnummer, Status as Status, Bearbeitung as Bearbeitung, Lieferunggeplant as Lieferunggeplant");
-			BestuellungStatus bestuellungStatus = new BestuellungStatus();
+					"SELECT BSID as id, Bestellnummer as Bestellnummer, Status as Status, Bearbeitung as Bearbeitung, Lieferunggeplant as Lieferunggeplant from BestellStatus");
+			BestellStatus bestuellungStatus = new BestellStatus();
 			while (rs.next()) {
-				bestuellungStatus.setBsID(rs.getInt(""));
-				bestuellungStatus.setBestellnr(rs.getString(""));
-				bestuellungStatus.setStatus(rs.getString(""));
-				bestuellungStatus.setBearbeitung(rs.getDate(""));
-				bestuellungStatus.setLieferunngsgeplant(rs.getDate(""));
+				bestuellungStatus.setBsID(rs.getInt(1));
+				bestuellungStatus.setBestellnr(rs.getString(2));
+				bestuellungStatus.setStatus(rs.getString(3));
+				bestuellungStatus.setBearbeitung(rs.getDate(4));
+				bestuellungStatus.setLieferunngsgeplant(rs.getDate(5));
 				bestellungStati.add(bestuellungStatus);
 			}
 			rs.close();

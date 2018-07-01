@@ -12,6 +12,7 @@ public class MyJTable extends JPanel{
 	JTable jTable = new JTable(new MyTableModel());
 
 	public void MyJTable(){
+		
 	    jTable.setPreferredScrollableViewportSize(new Dimension(500, 100));
 	    JScrollPane scrollPane = new JScrollPane(jTable);
 	    add(scrollPane);

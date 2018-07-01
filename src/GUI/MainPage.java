@@ -10,10 +10,13 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import Connection.MyConnection;
+
 
 public class MainPage {
 	public static void main(String[] args) {
-
+		
+		
 		MyJTable jTable = new MyJTable();
 		JFrame frame = new JFrame("Cool Shoes");
 		JPanel topPanel = new JPanel();
@@ -36,7 +39,8 @@ public class MainPage {
 				History history = new History();
 			}
 		});
-
+		
+		
 		topPanel.add(order, BorderLayout.WEST);
 //		frame.add(historyButton, BorderLayout.SOUTH);
 		downPanel.add(jTable, BorderLayout.CENTER);

@@ -3,7 +3,7 @@ package DAO;
 import java.util.ArrayList;
 import java.util.Date;
 
-public class BestuellungStatus {
+public class BestellStatus {
 
 	private int bsID;
 	private String bestellnr;

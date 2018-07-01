@@ -1,7 +1,7 @@
 package Helper;
 import java.util.ArrayList;
 import Connection.MyConnection;
-import DAO.BestuellungStatus;
+import DAO.BestellStatus;
 import DAO.Kunde;
 
 public class Helper {
@@ -16,13 +16,15 @@ public class Helper {
 		 }
 		return kunden;
 	}
+	
 	public static void main(String[] args) {
 	Helper helper = new Helper();
 	helper.getStati();
 	}
-	public ArrayList<BestuellungStatus> getStati(){
-		ArrayList<BestuellungStatus> stati = connection.getAllBestellstatus();
-		 for (BestuellungStatus status : stati) {
+	
+	public ArrayList<BestellStatus> getStati(){
+		ArrayList<BestellStatus> stati = connection.getAllBestellstatus();
+		 for (BestellStatus status : stati) {
 			 System.out.println(status);
 		 }
 		return stati;
