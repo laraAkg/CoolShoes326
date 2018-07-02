@@ -9,7 +9,9 @@ import java.util.ArrayList;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
@@ -17,12 +19,21 @@ import Helper.Helper;
 
 public class SearchPage implements ActionListener{
 	ArrayList<String> alleStati;
+	ArrayList<String> alleMitarbeiter;
+	ArrayList<String> alleKunde;
+	
 	JButton buttonOK;
+	JButton buttonSend;
+	JButton buttonLate;
 	Helper helper;
 	JTextField tfName;
+	JTextField dateField;
 	JPanel panel;
 	JDialog dialog;
 	JComboBox statusList;
+	JComboBox alleMitarbeiterCB;
+	JComboBox alleKundeCB;
+
 	String bestellnummer;
 	public SearchPage() {
 		alleStati = new ArrayList<>();
@@ -30,7 +41,6 @@ public class SearchPage implements ActionListener{
 		alleStati.add("Auftrag Aufbereiten");
 		alleStati.add("Auftrag Versandbereit");
 		alleStati.add("Auftrag Abgeschlossen");
-		
 		
 		helper = new Helper();
 		dialog = new JDialog();
@@ -43,15 +53,21 @@ public class SearchPage implements ActionListener{
 		JLabel label = new JLabel("Bestellnummer: ");
 		panel.add(label);
 
-		tfName = new JTextField("Example Nummer", 15);
+		tfName = new JTextField("Beispiel Nummer", 15);
+		dateField = new JTextField("2015-03-20", 15);
 		
 		panel.add(tfName);
 		buttonOK = new JButton("Search");
 		buttonOK.addActionListener(this);
-		
+		buttonSend = new JButton("Send");
+		buttonSend.addActionListener(this);
+		buttonLate = new JButton("Auftrag verspätet");
+		buttonLate.addActionListener(this);
 		panel.add(buttonOK);
 		dialog.add(panel);
 		dialog.setVisible(true);
+		alleMitarbeiter = helper.connection.getAllMitarbeiter();
+		alleKunde = helper.connection.getAllKunde();
 
 	}
 
@@ -62,38 +78,51 @@ public class SearchPage implements ActionListener{
         if(ae.getSource() == this.buttonOK){
         	bestellnummer = tfName.getText();
         	ArrayList<String> stati = helper.connection.getStatiByBstlNR(tfName.getText());
-        	int counter = 0;
-        	for(String i : stati) {
-        		JLabel j = new JLabel(i);
-        		panel.add(j);
-        		
+        	if (!stati.isEmpty()) {
+        		int counter = 0;
+            	for(String i : stati) {
+            		JLabel j = new JLabel(i);
+            		panel.add(j);
+            		
+            	}
+            	
+            	for(String i : stati) {
+            			alleStati.remove(counter);
+                  	}
+            	
+            	statusList = new JComboBox(alleStati.toArray());
+            	alleMitarbeiterCB = new JComboBox(alleMitarbeiter.toArray());
+            	alleKundeCB = new JComboBox(alleKunde.toArray());
+            	
+            	statusList.setSelectedIndex(0);
+            	statusList.addActionListener(this);
+            	alleMitarbeiterCB.setSelectedIndex(0);
+            	alleMitarbeiterCB.addActionListener(this);
+            	alleKundeCB.setSelectedIndex(0);
+            	alleKundeCB.addActionListener(this);
+            	panel.add(alleKundeCB);
+            	panel.add(alleMitarbeiterCB);
+            	panel.add(statusList);
+            	panel.add(buttonSend);
+            	panel.add(buttonLate);
+            	panel.add(dateField);
+            	panel.repaint();
+            	dialog.repaint();
+            	panel.revalidate();
+            	dialog.revalidate();
+            	panel.doLayout();
+            	dialog.doLayout();
+        	}else {
+        		JOptionPane.showMessageDialog(dialog, "Please enter a valid Order Number.");
         	}
         	
-        	for(String i : stati) {
-        			alleStati.remove(counter);
-              	}
         	
-        	statusList = new JComboBox(alleStati.toArray());
-        	
-        	statusList.setSelectedIndex(0);
-        	statusList.addActionListener(this);
-        	panel.add(statusList);
-        	panel.repaint();
-        	dialog.repaint();
-        	panel.revalidate();
-        	dialog.revalidate();
-        	panel.doLayout();
-        	dialog.doLayout();
-        	
-        }else if(ae.getSource() == this.statusList) {
-        	helper.connection.setStatus(statusList.getSelectedItem().toString(), bestellnummer);
-        	
-        	panel.repaint();
-        	dialog.repaint();
-        	panel.revalidate();
-        	dialog.revalidate();
-        	panel.doLayout();
-        	dialog.doLayout();
+        }else if(ae.getSource() == this.buttonSend) {
+        	helper.connection.setStatus(statusList.getSelectedItem().toString(), bestellnummer, alleMitarbeiterCB.getSelectedItem().toString(), alleKundeCB.getSelectedItem().toString());
+        	dialog.dispose();
+        }else if(ae.getSource() == this.buttonLate) {
+        	helper.connection.setLateStatus(bestellnummer, alleMitarbeiterCB.getSelectedItem().toString(), alleKundeCB.getSelectedItem().toString(), dateField.getText());
+        	dialog.dispose();
         }
         
     }

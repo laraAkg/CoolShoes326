@@ -26,32 +26,6 @@ public class MyConnection {
 		}
 	}
 
-	public ArrayList<Kunde> getAllKunde() {
-		ArrayList<Kunde> kunden = new ArrayList<>();
-		try {
-			Statement stmt = conn.createStatement();
-			ResultSet rs = stmt.executeQuery(
-					"SELECT KID as ID, KName as Name, KVorname as Vorname, KAdresse as Adresse, KPLZ as PLZ, KOrt as Ort, KEmailAdresse as Email, KPWD as Passwort FROM Kunde");
-			while (rs.next()) {
-				Kunde kunde = new Kunde();
-				kunde.setId(rs.getInt("ID"));
-				kunde.setVorname(rs.getString("Vorname"));
-				kunde.setNachname(rs.getString("Name"));
-				kunde.setAdreesse(rs.getString("Adresse"));
-				kunde.setPlz(rs.getString("PLZ"));
-				kunde.setOrt(rs.getString("Ort"));
-				kunde.setEmail(rs.getString("Email"));
-				kunde.setPasswort(rs.getString("Passwort"));
-				kunden.add(kunde);
-			}
-			rs.close();
-			stmt.close();
-		} catch (SQLException err) {
-			System.out.println("ungültiger SQL-Befehl");
-		}
-		return kunden;
-	}
-
 	public String getMitarbeiterFromBID(int bid) {
 		String kundenName = "";
 
@@ -103,12 +77,47 @@ public class MyConnection {
 		return bestellungStati;
 	}
 
+	public ArrayList<String> getAllKunde() {
+		ArrayList<String> kundenListe = new ArrayList<>();
+
+		try {
+			Statement stmt = conn.createStatement();
+			ResultSet rs = stmt.executeQuery("Select KName, KVorname from Kunde");
+
+			while (rs.next()) {
+				kundenListe.add(rs.getString(1) + " " + rs.getString(2));
+			}
+			rs.close();
+			stmt.close();
+		} catch (SQLException err) {
+			System.out.println("ungültiger SQL-Befehl");
+		}
+		return kundenListe;
+	}
+
+	public ArrayList<String> getAllMitarbeiter() {
+		ArrayList<String> mitarbeiterListe = new ArrayList<>();
+
+		try {
+			Statement stmt = conn.createStatement();
+			ResultSet rs = stmt.executeQuery("Select MAName, MAVorname from Mitarbeiter");
+			while (rs.next()) {
+				mitarbeiterListe.add(rs.getString(1) + " " + rs.getString(2));
+			}
+			rs.close();
+			stmt.close();
+		} catch (SQLException err) {
+			System.out.println("ungültiger SQL-Befehl");
+		}
+		return mitarbeiterListe;
+	}
+
 	public ArrayList<String> getStatiByBstlNR(String bestellNummer) {
 		ArrayList<String> bestellungsNummern = new ArrayList<>();
 
 		try {
 			PreparedStatement ps = conn.prepareStatement("SELECT Status from BestellStatus where Bestellnummer = ?");
-			
+
 			ps.setString(1, bestellNummer);
 
 			ResultSet rs = ps.executeQuery();
@@ -116,19 +125,128 @@ public class MyConnection {
 			while (rs.next())
 				bestellungsNummern.add(rs.getString(1));
 
-
 			ps.close();
 		} catch (SQLException err) {
 			System.out.println("ungültiger SQL-Befehl");
 		}
 		return bestellungsNummern;
 	}
-	
-	public void setStatus(String status, String bestellNummer) {
-		
+
+	public int getMitarbeiterByName(String name) {
+		String[] vorNachName = name.split(" ");
+		int i = 0;
 		try {
-			PreparedStatement ps = conn.prepareStatement("INSERT INTO BestellStatus (BestellNummer, Status, Bearbeitung)\n" + 
-					"VALUES (?, ?, ?);");
+			PreparedStatement ps = conn
+					.prepareStatement("SELECT MID from Mitarbeiter where MAName = ? and MAVorname = ?");
+
+			ps.setString(1, vorNachName[0]);
+			ps.setString(2, vorNachName[1]);
+
+			ResultSet rs = ps.executeQuery();
+
+			while (rs.next())
+				i = rs.getInt(1);
+
+			ps.close();
+		} catch (SQLException err) {
+			System.out.println("ungültiger SQL-Befehl");
+		}
+		return i;
+	}
+
+	public int getKundeIdByName(String name) {
+		String[] vorNachName = name.split(" ");
+
+		int i = 0;
+		try {
+			PreparedStatement ps = conn.prepareStatement("SELECT KID from Kunde where KName = ? and KVorname = ?");
+
+			ps.setString(1, vorNachName[0]);
+			ps.setString(2, vorNachName[1]);
+
+			ResultSet rs = ps.executeQuery();
+
+			while (rs.next())
+				i = rs.getInt(1);
+
+			ps.close();
+		} catch (SQLException err) {
+			System.out.println("ungültiger SQL-Befehl");
+		}
+		return i;
+	}
+
+	public void setLateStatus(String bestellNummer, String mitarbeiter, String Kunde, String datum) {
+		
+		
+		ArrayList<String> alphabet = new ArrayList<>();
+		fillAlphabet(alphabet);
+
+		int kundenID = getKundeIdByName(Kunde);
+		int mitarbeiterId = getMitarbeiterByName(mitarbeiter);
+		try {
+			PreparedStatement ps2 = conn.prepareStatement(
+					"INSERT INTO Bestellungen (FKKunde, FKStatus, FKMitarbeiter)\n" + "VALUES (?, ?, ?);");
+			ps2.setInt(1, kundenID);
+			ps2.setInt(2, 3);
+			ps2.setInt(3, mitarbeiterId);
+			ps2.executeUpdate();
+
+		} catch (SQLException e1) {
+			e1.printStackTrace();
+		}
+
+		try {
+			PreparedStatement ps = conn.prepareStatement(
+					"INSERT INTO BestellStatus (BestellNummer, Status, Bearbeitung, Lieferunggeplant)\n" + "VALUES (?, ?, ?, ?);");
+			int counter = 0;
+			if(!bestellNummer.contains("A")) {
+				for(String i : alphabet) {
+					counter++;
+					if(bestellNummer.endsWith(i)) {
+						bestellNummer = bestellNummer.replace(alphabet.get(counter-1), "");
+						bestellNummer += alphabet.get(counter);
+						break;
+					}
+				}
+			}else {
+				bestellNummer += "A";
+			}
+			
+			
+			ps.setString(1, bestellNummer);
+			ps.setString(2, "Teilauftrag verspätet");
+			java.sql.Date sqlDate = new java.sql.Date(new java.util.Date().getTime());
+			ps.setDate(3, sqlDate);
+			ps.setDate(4, sqlDate);
+			ps.executeUpdate();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+	}
+	
+	
+	public void setStatus(String status, String bestellNummer, String mitarbeiter, String Kunde) {
+
+		int kundenID = getKundeIdByName(Kunde);
+		int mitarbeiterId = getMitarbeiterByName(mitarbeiter);
+		try {
+			PreparedStatement ps2 = conn.prepareStatement(
+					"INSERT INTO Bestellungen (FKKunde, FKStatus, FKMitarbeiter)\n" + "VALUES (?, ?, ?);");
+			ps2.setInt(1, kundenID);
+			ps2.setInt(2, 3);
+			ps2.setInt(3, mitarbeiterId);
+			ps2.executeUpdate();
+
+		} catch (SQLException e1) {
+			e1.printStackTrace();
+		}
+
+		try {
+			PreparedStatement ps = conn.prepareStatement(
+					"INSERT INTO BestellStatus (BestellNummer, Status, Bearbeitung)\n" + "VALUES (?, ?, ?);");
 			ps.setString(1, bestellNummer);
 			ps.setString(2, status);
 			java.sql.Date sqlDate = new java.sql.Date(new java.util.Date().getTime());
@@ -138,6 +256,34 @@ public class MyConnection {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+
+	}
+	
+	public void fillAlphabet(ArrayList<String> alphabet) {
+		alphabet.add("B");
+		alphabet.add("C");
+		alphabet.add("D");
+		alphabet.add("E");
+		alphabet.add("F");
+		alphabet.add("G");
+		alphabet.add("H");
+		alphabet.add("I");
+		alphabet.add("J");
+		alphabet.add("K");
+		alphabet.add("L");
+		alphabet.add("M");
+		alphabet.add("N");
+		alphabet.add("O");
+		alphabet.add("P");
+		alphabet.add("Q");
+		alphabet.add("R");
+		alphabet.add("S");
+		alphabet.add("T");
+		alphabet.add("U");
+		alphabet.add("V");
+		alphabet.add("W");
+		alphabet.add("X");
+		alphabet.add("Y");
+		alphabet.add("Z");
 	}
 }

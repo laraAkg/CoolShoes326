@@ -8,13 +8,6 @@ import DAO.Kunde;
 public class Helper {
 	public MyConnection connection = new MyConnection();
 
-	public ArrayList<Kunde> getKunden() {
-		ArrayList<Kunde> kunden = connection.getAllKunde();
-		 for (Kunde kunde : kunden) {
-			System.out.println(kunde);
-		 }
-		return kunden;
-	}
 	
 	public static void main(String[] args) {
 	Helper helper = new Helper();

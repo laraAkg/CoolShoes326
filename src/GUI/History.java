@@ -19,10 +19,10 @@ public class History {
 		JPanel topPanel = new JPanel();
 		JPanel bottomPanel = new JPanel();
 		Helper helper = new Helper();
-		ArrayList<Kunde> kunden = helper.getKunden();
+		//ArrayList<Kunde> kunden = helper.connection.getAllKunde();
 		int id = 1;
-		JLabel name = new JLabel(kunden.get(id).getVorname() + " " + kunden.get(id).getNachname());
-		JLabel adresse = new JLabel(kunden.get(id).getAdreesse() + ", " + kunden.get(id).getOrt() + " " + kunden.get(id).getPlz());
+//		JLabel name = new JLabel(kunden.get(id).getVorname() + " " + kunden.get(id).getNachname());
+//		JLabel adresse = new JLabel(kunden.get(id).getAdreesse() + ", " + kunden.get(id).getOrt() + " " + kunden.get(id).getPlz());
 
 		String[] columns = new String[] { "OrderNr.", "Versandpartner", "Mitarbeiter", "Status" };
 		Object[][] data = new Object[][] { { "TEST", "John", "40.0", "false" }, { "1", "John", "40.0", "false" },
@@ -36,12 +36,12 @@ public class History {
 		topPanel.setLayout(new BorderLayout());
 		dialog.setTitle("History");
 		dialog.setSize(700, 600);
-		name.setFont(new Font("Tahoma", Font.PLAIN, 20));
-		adresse.setFont(new Font("Tahoma", Font.PLAIN, 20));
+//		name.setFont(new Font("Tahoma", Font.PLAIN, 20));
+//		adresse.setFont(new Font("Tahoma", Font.PLAIN, 20));
 		topPanel.setBackground(Color.WHITE);
 		bottomPanel.setBackground(Color.WHITE);	
-		topPanel.add(name, BorderLayout.CENTER);
-		topPanel.add(adresse, BorderLayout.EAST);
+//		topPanel.add(name, BorderLayout.CENTER);
+//		topPanel.add(adresse, BorderLayout.EAST);
 		bottomPanel.add(table, BorderLayout.SOUTH);
 		dialog.add(bottomPanel, BorderLayout.CENTER);
 		dialog.add(topPanel, BorderLayout.NORTH);
