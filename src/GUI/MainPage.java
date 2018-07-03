@@ -36,7 +36,8 @@ public class MainPage {
 		button.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				SearchPage page = new SearchPage();
+				SearchPage page = new SearchPage(frame);
+				frame.setVisible(false);
 			}
 		});
 		topPanel.add(order, BorderLayout.WEST);

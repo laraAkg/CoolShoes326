@@ -1,15 +1,14 @@
 package Connection;
 
-import java.sql.*;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
-import java.util.Calendar;
 
 import DAO.BestellStatus;
-import DAO.Kunde;
 
 public class MyConnection {
 
@@ -113,7 +112,7 @@ public class MyConnection {
 	}
 
 	public ArrayList<String> getStatiByBstlNR(String bestellNummer) {
-		ArrayList<String> bestellungsNummern = new ArrayList<>();
+		ArrayList<String> statis = new ArrayList<>();
 
 		try {
 			PreparedStatement ps = conn.prepareStatement("SELECT Status from BestellStatus where Bestellnummer = ?");
@@ -123,13 +122,13 @@ public class MyConnection {
 			ResultSet rs = ps.executeQuery();
 
 			while (rs.next())
-				bestellungsNummern.add(rs.getString(1));
+				statis.add(rs.getString(1));
 
 			ps.close();
 		} catch (SQLException err) {
 			System.out.println("ungültiger SQL-Befehl");
 		}
-		return bestellungsNummern;
+		return statis;
 	}
 
 	public int getMitarbeiterByName(String name) {
@@ -200,7 +199,7 @@ public class MyConnection {
 			PreparedStatement ps = conn.prepareStatement(
 					"INSERT INTO BestellStatus (BestellNummer, Status, Bearbeitung, Lieferunggeplant)\n" + "VALUES (?, ?, ?, ?);");
 			int counter = 0;
-			if(!bestellNummer.contains("A")) {
+			if(bestellNummer.contains("A")) {
 				for(String i : alphabet) {
 					counter++;
 					if(bestellNummer.endsWith(i)) {
@@ -228,8 +227,12 @@ public class MyConnection {
 	}
 	
 	
-	public void setStatus(String status, String bestellNummer, String mitarbeiter, String Kunde) {
-
+	public String setStatus(String status, String bestellNummer, String mitarbeiter, String Kunde) {
+		
+		if(status == ""){
+			return "Status Abgeschlossen";
+		}
+		
 		int kundenID = getKundeIdByName(Kunde);
 		int mitarbeiterId = getMitarbeiterByName(mitarbeiter);
 		try {
@@ -256,6 +259,8 @@ public class MyConnection {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		
+		return "";
 
 	}
 	
